@@ -1,1 +1,2 @@
 # 4240GroupProject
+To set up your own simulated IOT device on wokwi, go to wokwi.com and select the ESP32 box in the top right corner. Then go to the "starter templates" section and select ESP32 again. Paste the code from benign.c or malicious.c into the sketch.ino file and press the green arrow to compile and run.
