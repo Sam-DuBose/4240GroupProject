@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>IoT Traffic Monitor | PCAP Analysis</title>
+<meta name="description" content="Upload a PCAP file to analyze device traffic and check for suspicious activity." />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div class="app-shell">
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="site-brand" href="#home" aria-label="IoT Traffic Monitor — Home">
+        <span class="brand-emblem" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="M11.3 28.5h18.2c4 0 6.6-2.8 6.6-6.3 0-3.4-2.7-6.1-6.1-6.3-.9-5.4-5.4-9-10.9-9-5.4 0-9.8 3.8-10.8 8.7-3.3.6-5.5 3.1-5.5 6.4 0 3.6 3 6.5 6.9 6.5z" stroke="currentColor" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 22h17" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" opacity=".5"/></svg></span>
+        <span class="brand-words"><strong>IoT Traffic Monitor</strong><small>Packet capture analysis</small></span>
+      </a>
+      <nav class="site-nav" aria-label="Main navigation">
+        <a class="top-link" id="nav-home" href="#home">Home</a>
+        <details class="nav-dropdown" id="results-dropdown">
+          <summary id="results-summary">Explore <span class="chevron" aria-hidden="true">⌄</span></summary>
+          <div class="dropdown-panel" role="group" aria-label="Analysis sections">
+            <a class="menu-link" data-view="overview" href="#overview"><span>Capture overview</span><small>Summary and metrics</small></a>
+            <a class="menu-link" data-view="alerts" href="#alerts"><span>Security alerts <span id="nav-alerts" class="nav-badge hidden">0</span></span><small>Possible issues to review</small></a>
+            <a class="menu-link" data-view="traffic" href="#traffic"><span>Traffic analysis</span><small>Ports and destinations</small></a>
+            <a class="menu-link" data-view="console" href="#console"><span>Analysis report</span><small>Local browser-generated report</small></a>
+            <a class="menu-link" data-view="guide" href="#guide"><span>Explanations</span><small>What the results mean</small></a>
+          </div>
+        </details>
+        <button type="button" class="header-upload" id="header-upload">Upload PCAP <span aria-hidden="true">↗</span></button>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="home-view" id="view-home" aria-labelledby="home-title">
+      <div class="home-hero">
+        <div class="home-hero-shade" aria-hidden="true"></div>
+        <div class="home-hero-inner">
+          <div class="hero-label"><span class="label-dot"></span> PCAP ANALYZER <span class="hero-label-sep">/</span> NETWORK DIAGNOSTICS</div>
+          <h1 id="home-title">See what’s happening<br />on your <span>network.</span></h1>
+          <p class="home-description">Upload a packet capture. See the traffic, check the alerts,<br class="desktop-break" /> and understand what your IoT device is doing.</p>
+          <div class="choose-panel" aria-label="Choose how to begin">
+            <div class="choose-heading">GET STARTED <span>CHOOSE AN OPTION</span></div>
+            <div class="home-options">
+              <button type="button" class="home-option upload-option" id="home-upload">
+                <span class="option-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5M4 15v4h16v-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <span class="option-text"><strong>Upload a PCAP file</strong><small>Start a new analysis</small></span><span class="option-arrow" aria-hidden="true">↗</span>
+              </button>
+              <button type="button" class="home-option last-option" id="home-last" disabled>
+                <span class="option-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3.5 10a8.5 8.5 0 1 1-1 5M3.5 4.5V10H9M12 7.5V12l3 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <span class="option-text"><strong>View last analysis</strong><small id="last-file-label">No previous analysis</small></span><span class="option-arrow" aria-hidden="true">→</span>
+              </button>
+            </div>
+            <div class="choose-footer"><span id="last-status" aria-live="polite">Checking for a previous report…</span></div>
+          </div>
+          <div id="home-feedback" class="home-feedback" role="status" aria-live="polite"></div>
+          <div class="hero-note"><span class="hero-note-dot"></span> Runs on your computer <span class="note-divider">·</span> .pcap and .pcapng supported</div>
+        </div>
+      </div>
+      <div class="home-bottom"><span><b>IoT Traffic Monitor</b> &nbsp; / &nbsp; Network analysis made simple</span><span>No installation required &nbsp; · &nbsp; Files analyzed locally</span></div>
+    </section>
+
+    <div class="dashboard-shell hidden" id="dashboard-shell">
+      <div class="dashboard-top">
+        <div class="breadcrumb"><a href="#home">Home</a><span class="bread-sep">/</span><strong id="breadcrumb-view">Overview</strong></div>
+        <span class="dashboard-top-meta">LOCAL PCAP ANALYSIS</span>
+      </div>
+      <div class="content">
+        <section class="capture-strip" id="drop-zone" tabindex="0" role="button" aria-label="Upload PCAP or PCAPNG file"><div class="capture-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5M4 15v3.5A1.5 1.5 0 005.5 20h13a1.5 1.5 0 001.5-1.5V15"/></svg></div><div class="capture-copy"><strong id="capture-title">Drop a capture file to get started</strong><span id="capture-subtitle">Drag and drop a .pcap or .pcapng file, or click to browse. Maximum 50 MB.</span></div><span class="capture-file" id="capture-file"></span><button class="btn btn-outline" id="capture-browse" type="button">Browse files <span>↗</span></button></section>
+        <div class="feedback" id="feedback" role="status" aria-live="polite"></div>
+        <div class="page-heading"><div><div class="section-kicker"><span id="report-time">No capture loaded</span></div><h2 id="section-title">Capture overview</h2><p id="section-subtitle">Click a summary card for an explanation.</p></div><div class="report-actions"><span class="report-pill" id="report-pill"><span class="soft-dot"></span> No file selected</span><button class="icon-button" type="button" id="export-json" title="Export report as JSON" aria-label="Download JSON report" disabled><svg viewBox="0 0 24 24" fill="none"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 17v2.5A1.5 1.5 0 005.5 21h13a1.5 1.5 0 001.5-1.5V17"/></svg></button></div></div>
+      <section class="view" id="view-overview">
+        <div class="metric-grid">
+          <a class="metric-card metric-link" href="#explain-packets" aria-label="Explain packets analyzed"><div class="metric-head"><span>PACKETS ANALYZED</span><span class="metric-icon">⬡</span></div><div class="metric-value" id="metric-packets">—</div><div class="metric-detail">Total packets in capture</div><div class="metric-more">View explanation <span>→</span></div><div class="metric-rail blue"></div></a>
+          <a class="metric-card metric-link" href="#explain-alerts" aria-label="Explain security alerts"><div class="metric-head"><span>SECURITY ALERTS</span><span class="metric-icon metric-icon-alert">⚑</span></div><div class="metric-value" id="metric-alerts">—</div><div class="metric-detail" id="detail-alerts">Findings to review</div><div class="metric-more">View explanation <span>→</span></div><div class="metric-rail coral"></div></a>
+          <a class="metric-card metric-link" href="#explain-http" aria-label="Explain HTTP requests"><div class="metric-head"><span>HTTP REQUESTS</span><span class="metric-icon">⇄</span></div><div class="metric-value" id="metric-http">—</div><div class="metric-detail">GET and POST requests seen</div><div class="metric-more">View explanation <span>→</span></div><div class="metric-rail navy"></div></a>
+          <a class="metric-card metric-link" href="#explain-duration" aria-label="Explain capture duration"><div class="metric-head"><span>CAPTURE DURATION</span><span class="metric-icon">◷</span></div><div class="metric-value" id="metric-duration">—</div><div class="metric-detail">Seconds of observed traffic</div><div class="metric-more">View explanation <span>→</span></div><div class="metric-rail teal"></div></a>
+        </div>
+        <div class="insight-grid"><article class="panel findings-panel"><div class="panel-heading"><div><div class="panel-kicker">SECURITY POSTURE</div><h3>Detection findings</h3></div><a class="tiny-explain" href="#explain-alerts">What is this? ↗</a><button class="text-button" type="button" data-link="alerts">View all <span>→</span></button></div><div id="overview-alerts" class="findings-content"><div class="empty-panel"><span class="empty-glyph">◈</span><strong>No capture analyzed yet</strong><p>Upload a PCAP file to see security findings.</p></div></div></article><article class="panel"><div class="panel-heading"><div><div class="panel-kicker">TRAFFIC COMPOSITION</div><h3>Protocol breakdown</h3></div><a class="tiny-explain" href="#explain-protocols">Explain ↗</a></div><div class="protocol-chart" id="overview-protocols"><div class="empty-panel small"><span class="empty-glyph">▥</span><p>Protocol distribution will appear here.</p></div></div><div class="legend" id="protocol-legend"></div></article></div>
+        <div class="lower-grid"><article class="panel compact-panel"><div class="panel-heading"><div><div class="panel-kicker">OUTBOUND ACTIVITY</div><h3>Top destination ports</h3></div><a class="tiny-explain" href="#explain-ports">Explain ↗</a><button type="button" class="text-button" data-link="traffic">Explore <span>→</span></button></div><div class="horizontal-bars" id="overview-ports"><div class="muted-placeholder">Waiting for packet data…</div></div></article><article class="panel compact-panel"><div class="panel-heading"><div><div class="panel-kicker">DEVICE IDENTITY</div><h3>Capture details</h3></div><a class="tiny-explain" href="#explain-device">Explain ↗</a></div><div class="details-grid"><div><a href="#explain-device" class="detail-explain">Most active source IP ↗</a><strong id="detail-ip">—</strong></div><div><a href="#explain-connections" class="detail-explain">Connection attempts ↗</a><strong id="detail-connections">—</strong></div><div><a href="#explain-destinations" class="detail-explain">Destination addresses ↗</a><strong id="detail-dests">—</strong></div><div><span>Detection engine</span><strong>Offline JavaScript</strong></div></div></article></div>
+      </section>
+      <section class="view hidden" id="view-alerts"><div class="alerts-toolbar"><div class="filter-group"><label for="severity-filter">Filter by severity</label><select id="severity-filter"><option value="all">All findings</option><option value="high">High</option><option value="medium">Medium</option></select></div><div class="filter-count" id="alert-counter">0 findings</div></div><div id="alerts-list" class="alert-list"><div class="empty-large"><div class="empty-large-icon">⚑</div><h3>No findings yet</h3><p>Upload a capture to inspect unusual connections, plaintext protocol usage, and HTTP bursts.</p></div></div><div class="disclaimer">These detections follow the rules in the original <code>pcap_analyze.py</code>. An alert is a signal to investigate, not confirmation of compromise.</div></section>
+      <section class="view hidden" id="view-traffic"><div class="traffic-grid"><article class="panel"><div class="panel-heading"><div><div class="panel-kicker">DESTINATIONS</div><h3>Outbound addresses</h3></div><a class="tiny-explain" href="#explain-destinations">Explain ↗</a></div><div class="table-wrap"><table><thead><tr><th>IP ADDRESS</th><th>PACKETS</th><th>SHARE</th></tr></thead><tbody id="destinations-table"><tr><td colspan="3" class="table-empty">No traffic loaded</td></tr></tbody></table></div></article><article class="panel"><div class="panel-heading"><div><div class="panel-kicker">PROTOCOLS</div><h3>Network protocol counts</h3></div><a class="tiny-explain" href="#explain-protocols">Explain ↗</a></div><div class="table-wrap"><table><thead><tr><th>PROTOCOL</th><th>PACKETS</th><th>SHARE</th></tr></thead><tbody id="protocols-table"><tr><td colspan="3" class="table-empty">No traffic loaded</td></tr></tbody></table></div></article></div><article class="panel ports-wide"><div class="panel-heading"><div><div class="panel-kicker">TCP / UDP</div><h3>Destination port activity</h3></div><a class="tiny-explain" href="#explain-ports">Explain ↗</a></div><div class="horizontal-bars wider" id="traffic-ports"><div class="muted-placeholder">Waiting for packet data…</div></div></article></section>
+      <section class="view hidden" id="view-guide">
+        <div class="guide-intro"><div><h3>Metric explanations</h3><p>What each result measures and how <code>pcap_analyze.py</code> calculates it.</p></div><a class="btn guide-back" href="#overview">← Back to overview</a></div>
+        <nav class="guide-index" aria-label="Jump to a metric explanation">
+          <a href="#explain-packets">Packets</a><a href="#explain-alerts">Alerts</a><a href="#explain-http">HTTP</a><a href="#explain-duration">Duration</a><a href="#explain-protocols">Protocols</a><a href="#explain-ports">Ports</a><a href="#explain-device">Device IP</a><a href="#explain-connections">Connections</a><a href="#explain-destinations">Destinations</a>
+        </nav>
+        <div class="guide-grid">
+          <article id="explain-packets" class="guide-card" tabindex="-1"><div class="guide-card-top"><span class="guide-symbol blue">⬡</span><span class="guide-number">01 / CAPTURE</span></div><h3>Packets analyzed</h3><p>A packet is one small unit of network data. This number counts <strong>all packets</strong> in the capture file, including those unrelated to the selected IoT device.</p><div class="guide-detail"><b>How the analyzer calculates it</b><span>The browser reads the capture file locally and counts its packet records.</span></div><div class="guide-tip">More packets means more observed traffic, not automatically more danger.</div></article>
+          <article id="explain-alerts" class="guide-card" tabindex="-1"><div class="guide-card-top"><span class="guide-symbol blue">⚑</span><span class="guide-number">02 / SECURITY</span></div><h3>Security alerts</h3><p>The number of findings generated by three rules: <strong>unusual destination ports</strong>, connections on potentially unsafe protocol ports, and <strong>HTTP request bursts</strong>.</p><div class="guide-detail"><b>How the analyzer calculates it</b><span>Each rule-generated finding is counted, not each attack or malicious packet. The frontend assigns High / Medium display labels.</span></div><div class="guide-tip">Alerts are clues for investigation, not proof a device was hacked. <a href="#alerts">See actual findings →</a></div></article>
+          <article id="explain-http" class="guide-card" tabindex="-1"><div class="guide-card-top"><span class="guide-symbol navy">⇄</span><span class="guide-number">03 / WEB TRAFFIC</span></div><h3>HTTP requests</h3><p>Counts outgoing TCP packets from the selected device whose visible payload <strong>starts with GET or POST</strong>.</p><div class="guide-detail"><b>How the analyzer calculates it</b><span>It inspects TCP packet payloads for the literal beginnings <code>GET </code> or <code>POST </code>.</span></div><div class="guide-tip">It does not count every web request, and it cannot read encrypted HTTPS content.</div></article>
+          <article id="explain-duration" class="guide-card" tabindex="-1"><div class="guide-card-top"><span class="guide-symbol navy">◷</span><span class="guide-number">04 / TIMING</span></div><h3>Capture duration</h3><p>The span of time between the <strong>first and last packet timestamps</strong> in the file, shown in seconds.</p><div class="guide-detail"><b>How the analyzer calculates it</b><span>Time of last packet minus time of first packet, rounded to one decimal.</span></div><div class="guide-tip">This is the observation window, not how long the device has been running.</div></article>
+          <article id="explain-protocols" class="guide-card" tabindex="-1"><div class="guide-card-top"><span class="guide-symbol blue">▥</span><span class="guide-number">05 / PROTOCOLS</span></div><h3>Protocol breakdown</h3><p>Groups observed IPv4 packets into <strong>DNS, TCP, UDP, or Other</strong>. DNS is checked first, so those packets are counted as DNS rather than also as TCP or UDP.</p><div class="guide-detail"><b>How the analyzer calculates it</b><span>Every supported IPv4 packet goes into one category based on its headers and ports.</span></div><div class="guide-tip">Bars show packet counts by category, not percentages of bandwidth. <a href="#traffic">Explore protocol data →</a></div></article>
+          <article id="explain-ports" class="guide-card" tabindex="-1"><div class="guide-card-top"><span class="guide-symbol navy">⌗</span><span class="guide-number">06 / PORTS</span></div><h3>Top destination ports</h3><p>Shows which <strong>destination service ports</strong> the chosen device sent traffic to most often. For example, port 80 is commonly HTTP and 443 is commonly HTTPS.</p><div class="guide-detail"><b>How the analyzer calculates it</b><span>Counts TCP and UDP destination port values for outgoing IPv4 packets from the chosen IP.</span></div><div class="guide-tip">A port number alone cannot prove which application or encryption a connection used.</div></article>
+          <article id="explain-device" class="guide-card" tabindex="-1"><div class="guide-card-top"><span class="guide-symbol blue">◎</span><span class="guide-number">07 / DEVICE</span></div><h3>Most active source IP</h3><p>The analyzer chooses the IPv4 address that <strong>sent the most packets</strong> in the file. It then treats that address as the IoT device for outbound traffic statistics and alert checks.</p><div class="guide-detail"><b>How the analyzer calculates it</b><span>Counts each IPv4 source address and selects the most frequent one.</span></div><div class="guide-tip">If a different device talks more than your ESP32, it may select the wrong IP.</div></article>
+          <article id="explain-connections" class="guide-card" tabindex="-1"><div class="guide-card-top"><span class="guide-symbol navy">⇢</span><span class="guide-number">08 / CONNECTIONS</span></div><h3>Connection attempts</h3><p>Counts outgoing TCP packets that have the <strong>SYN flag set without ACK</strong>. These often mark the beginning of a TCP handshake.</p><div class="guide-detail"><b>How the analyzer calculates it</b><span>One count for each outgoing SYN-only packet from the selected device.</span></div><div class="guide-tip">Retries can increase this count. It does not tell you if connections succeeded.</div></article>
+          <article id="explain-destinations" class="guide-card" tabindex="-1"><div class="guide-card-top"><span class="guide-symbol blue">⌁</span><span class="guide-number">09 / ADDRESSES</span></div><h3>Destination addresses</h3><p>The unique destination IPv4 addresses the selected device <strong>sent packets to</strong>. The traffic page shows how many outgoing packets went to each address.</p><div class="guide-detail"><b>How the analyzer calculates it</b><span>Counts the destination IP on outgoing IPv4 packets from the selected source IP.</span></div><div class="guide-tip">It is a count of observed addresses, not necessarily devices on your home network.</div></article>
+        </div>
+        <div class="guide-bottom"><span>IoT Traffic Monitor</span><p>Forensics starts with evidence. Use the report and the original packet capture to validate findings.</p><a href="#console" class="btn btn-primary">Open analysis report →</a></div>
+      </section>
+      <section class="view hidden" id="view-console"><article class="console-panel"><div class="console-header"><div class="console-title"><span class="terminal-dots"><i></i><i></i><i></i></span><span>Offline analyzer <span class="terminal-filename" id="console-filename">/ no capture</span></span></div><div class="console-actions"><button id="copy-console" type="button" disabled>Copy output</button><button id="save-console" type="button" disabled>↓ Save .txt</button></div></div><pre id="console-output" class="console-output">$ Upload a .pcap or .pcapng file to analyze it here.
+
+# Upload a PCAP file to begin.
+# The generated analysis report will appear here.</pre><div class="console-footer"><span class="green-dot"></span> Local browser-generated report using the project detection rules <span class="terminal-right">Browser · Offline</span></div></article></section>
+
+        <footer class="footer"><span>IoT Traffic Monitor · Offline edition</span><span>PCAP files processed locally</span></footer>
+      </div>
+    </div>
+  </main>
+</div>
+<input type="file" id="file-input" accept=".pcap,.pcapng" hidden />
+<script src="offline_analyzer.js" defer></script>
+<script src="app_offline.js" defer></script>
+</body>
+</html>
