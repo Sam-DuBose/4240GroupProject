@@ -16,7 +16,7 @@ UNSAFE_PORTS = {21: "FTP", 23: "Telnet", 80: "HTTP"}
 
 #more than this many HTTP requests within BURST_WINDOW seconds is a burst
 BURST_COUNT = 5
-BURST_WINDOW = 10
+BURST_WINDOW = 30
 
 
 #Read the pcap file
