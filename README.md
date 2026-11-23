@@ -15,3 +15,4 @@ An open-source tool that analyzes IoT network traffic (pcap) and alerts on abnor
 
 ## Traffic Analyzer
 *In progress*: Python script that parses the captured pcap and reports diagnostics and red flags.
+to run the website run the index file and upload your pcap file
