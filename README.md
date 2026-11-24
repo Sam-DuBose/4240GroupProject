@@ -14,5 +14,4 @@ An open-source tool that analyzes IoT network traffic (pcap) and alerts on abnor
 | `malicious.ino` | Same as benign, plus every 60 seconds: a burst of 10 rapid HTTP requests and connection attempts on ports 23 (Telnet), 2222, and 8080 |
 
 ## Traffic Analyzer
-*In progress*: Python script that parses the captured pcap and reports diagnostics and red flags.
-to run the website run the index file and upload your pcap file
+Python script that parses the captured pcap and reports diagnostics and red flags. To run the website run the index file and upload your pcap file to the website and it will send the issues that indicate something malicious is happening.
